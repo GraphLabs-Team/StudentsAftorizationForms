@@ -7,7 +7,10 @@ import * as Yup from "yup";
 import {RoutesManager} from "../routes/routes";
 import {inputTypes, outputTypes} from "../routes/routesTypes"
 type Props = {};
+function Change1(el:any){
+  el.style.color = 'grey';
 
+}
 type State = {
   redirect: string | null,
   email: string, 
@@ -95,7 +98,7 @@ export default class Login extends Component<Props, State> {
           >
             <Form>
               <div className="form-group">
-                <label htmlFor="email">email</label>
+                <label htmlFor="email">Электронная почта</label>
                 <Field name="email" type="text" className="form-control" />
                 <ErrorMessage
                   name="email"
@@ -105,7 +108,7 @@ export default class Login extends Component<Props, State> {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Пароль</label>
                 <Field name="password" type="password" className="form-control" />
                 <ErrorMessage
                   name="password"
@@ -115,11 +118,11 @@ export default class Login extends Component<Props, State> {
               </div>
 
               <div className="form-group">
-                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                <button type="submit" onClick={()=>{alert("Успех")}} className="btn btn-primary btn-block" disabled={loading}>
                   {loading && (
                     <span className="spinner-border spinner-border-sm"></span>
                   )}
-                  <span>Login</span>
+                  <span>Вход</span>
                 </button>
               </div>
 

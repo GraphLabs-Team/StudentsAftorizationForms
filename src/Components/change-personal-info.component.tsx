@@ -11,6 +11,7 @@ type State = {
   lastName: string, 
   email: string,
   password: string,
+  confirmPassword: string,
   successful: boolean,
   message: string,
   group: string
@@ -19,16 +20,17 @@ function Change(el:any){
   el.style.color = 'grey';
 
 }
-export default class Register extends Component<Props, State> {
+export default class Changes extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.handleRegister = this.handleRegister.bind(this);
+    this.handleChanges = this.handleChanges.bind(this);
 
     this.state = {
       firstName: "", 
       lastName: "", 
       email: "",
       password: "",
+      confirmPassword: '',
       successful: false,
       message: "",
       group: ""
@@ -36,45 +38,45 @@ export default class Register extends Component<Props, State> {
   }
 
   validationSchema() {
+    var numbers=[0,1,2,3,4,5,6,7,8,9]
     return Yup.object().shape({
       firstName: Yup.string()
-        .test(
-          "len",
-          "The firstName must be between 1 and 20 characters.",
-          (val: any) =>
-            val &&
-            val.toString().length >= 3 &&
-            val.toString().length <= 20
-        )
-        .required("This field is required!"),
-        lastName: Yup.string()
-        .test(
-          "len",
-          "The lastName must be between 1 and 20 characters.",
-          (val: any) =>
-            val &&
-            val.toString().length >= 3 &&
-            val.toString().length <= 20
-        )
-        .required("This field is required!"),
+        .required("Это обязательное поле!"),
+      lastName: Yup.string()
+        .required("Это обязательное поле!"),
       email: Yup.string()
-        .email("This is not a valid email.")
-        .required("This field is required!"),
-      password: Yup.string()
+        .email("Это не адрес электронной почты.")
+        .required("Это обязательное поле!"),
+      group: Yup.string()
         .test(
           "len",
-          "The password must be between 6 and 40 characters.",
+          "Это не номер группы.",
           (val: any) =>
             val &&
-            val.toString().length >= 6 &&
-            val.toString().length <= 40
+            val.toString().length == 7 &&
+            val.toString()[0] in ['Б','С']&&
+            val.toString()[1] in numbers &&
+            val.toString()[2] in numbers &&
+            val.toString()[3] == '-'&&
+            val.toString()[4] in numbers &&
+            val.toString()[5] in numbers &&
+            val.toString()[6] in numbers
         )
-        .required("This field is required!"),
+        .required("Это обязательное поле!"),
+      password: Yup.string()
+      .min(6, 'Минимальная длина пароля 6 символов')
+      .max(40, 'Максимальная длина пароля 40 символов')
+        .required("Это обязательное поле!"),
+        confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Пароли не совпадают')
+        .min(6, 'Минимальная длина пароля 6 символов')
+        .max(40, 'Максимальная длина пароля 40 символов')
+        .required("Это обязательное поле!"),
     });
   }
 
 
-  handleRegister(formValue: { firstName: string,lastName: string; email: string; password: string;group: string }) {
+  handleChanges(formValue: { firstName: string,lastName: string; email: string; password: string;group: string }) {
     const { firstName, lastName, email, password,group } = formValue;
 
     this.setState({
@@ -85,7 +87,7 @@ export default class Register extends Component<Props, State> {
 
     function setter(a: outputTypes.UserToken){}
 
-	  let regUserBody: inputTypes.UserReg = {
+	  let changeUserBody: inputTypes.UserReg = {
 		  email: email, 
       firstName: firstName, 
       lastName: lastName, 
@@ -93,7 +95,7 @@ export default class Register extends Component<Props, State> {
       
 	}
 
-    RoutesManager.createUser(regUserBody, setter)
+    RoutesManager.createUser/*changeUser*/(changeUserBody, setter)//Подставить функцию редактирования бд
 
   }
 
@@ -120,7 +122,7 @@ export default class Register extends Component<Props, State> {
           <Formik
             initialValues={initialValues}
             validationSchema={this.validationSchema}
-            onSubmit={this.handleRegister}
+            onSubmit={this.handleChanges}
           >
             <Form>
               {!successful && (
@@ -155,7 +157,7 @@ export default class Register extends Component<Props, State> {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="group"> Группа </label>
+                    <label htmlFor="group"> Группа (Б00-000) </label>
                     <Field name="group" type="group" className="form-control" />
                     <ErrorMessage
                       name="group"
@@ -179,7 +181,21 @@ export default class Register extends Component<Props, State> {
                   </div>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-primary btn-block"  >Зарегистрироваться</button>
+                    <label htmlFor="confirmassword"> Повторите пароль </label>
+                    <Field
+                      name="confirmPassword"
+                      type="Password"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component="div"
+                      className="alert alert-danger"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <button type="submit" className="btn btn-primary btn-block"  >Подтвердить</button>
                   </div>
                 </div>
               )}

@@ -8,6 +8,7 @@ import IUser from './types/user.type';
 
 import Login from "./Components/login.component";
 import Register from "./Components/register.component";
+import Changes from "./Components/change-personal-info.component";
 import Home from "./Components/home.component";
 import Profile from "./Components/profile.component";
 import BoardUser from "./Components/board-user.component";
@@ -130,6 +131,11 @@ class App extends Component<Props, State> {
                   Sign Up
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to={"/change"} className="nav-link">
+                  Change
+                </Link>
+              </li>
             </div>
           )}
         </nav>
@@ -140,6 +146,7 @@ class App extends Component<Props, State> {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/change" element={<Changes />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/user" element={<BoardUser />} />
             <Route path="/mod" element={<BoardModerator />} />

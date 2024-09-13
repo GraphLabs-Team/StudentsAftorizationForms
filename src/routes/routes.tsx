@@ -50,6 +50,20 @@ class RoutesManager{
         .catch(e => console.log(e))
     }
 
+    public static changeUser(requestBody: inputTypes.UserReg, setter: (variable: outputTypes.UserToken) => void){//////изменить
+        
+        const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(requestBody)
+		};
+
+        fetch(baseUrl + createUserUrl, requestOptions)
+        .then(response => response.json())
+        .then(response => setter(response))
+        .catch(e => console.log(e))
+    }
+
     public static getTests(setter: (variable: outputTypes.Tests) => void){
         fetch(baseUrl + getTestsUrl)
         .then(response => response.json())
